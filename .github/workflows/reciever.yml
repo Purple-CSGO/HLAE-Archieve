@@ -15,7 +15,7 @@ jobs:
       uses: carlosperate/download-file-action@v1.0.3
       with:
         # URL of the file to download
-        file-url: https://api.github.com/repos/advancedfx/advancedfx/releases
+        file-url: https://api.github.com/repos/advancedfx/advancedfx/releases/latest
         # New filename to rename the downloaded file
         file-name: release.json
         #location: # optional, default is .
