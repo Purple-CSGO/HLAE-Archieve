@@ -27,24 +27,24 @@ jobs:
         chmod 777 repo-transporter
         ./repo-transporter
         ls -al
-    # commit 提交改动
-    - name: Git Auto Commit
-      uses: stefanzweifel/git-auto-commit-action@v4.4.0
+        
+    - name: push
+      uses: github-actions-x/commit@v2.6
       with:
-        # Commit message
-        commit_message: "Git Auto Commit"
-
-    # Push 上传
-    - uses: ad-m/github-push-action@v0.6.0
-      with:
-        # Token for the repo. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}
-        github_token: $\{{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        push-branch: master
+        commit-message: 'Automatically pushed by GitHub Actions'
+        rebase: 'true' # pull abd rebase before commit
     
-    # 等待60s 以防先发布再push
-    - name: Sleep for 60 seconds
+    - name: dir
+      run: |
+        ls -al
+        
+    # 等待10s 以防先发布再push
+    - name: Sleep for 10 seconds
       uses: jakejarvis/wait-action@master
       with:
-        time: '60s'
+        time: '10s'
 
   release:
     needs: transport
@@ -58,7 +58,11 @@ jobs:
           provider: github
           repository: advancedfx/advancedfx
           env_name: LATEST_HLAE_TAG
-        
+      
+      - name: dir
+        run: |
+          ls -al
+      
       # Release 发布
       - name: Create a Release
         uses: actions/create-release@v1
