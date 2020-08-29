@@ -35,6 +35,7 @@ jobs:
         push-branch: master
         commit-message: 'Automatically pushed by GitHub Actions'
         rebase: 'true' # pull abd rebase before commit
+        force-add: 'true'
     
     - name: dir
       run: |
