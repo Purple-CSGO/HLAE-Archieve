@@ -50,6 +50,7 @@ jobs:
     needs: transport
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       # 获取原仓库的版本
       - name: Get Latest HLAE Tag
       # ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
