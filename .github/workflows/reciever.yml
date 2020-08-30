@@ -10,6 +10,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    # 获取原仓库的版本
+    - name: Get Latest HLAE Tag
+      uses: actions-hub/watch-tag@master
+      with:
+         provider: github
+         repository: advancedfx/advancedfx
+         env_name: LATEST_HLAE_TAG
+
     # 下载API文件
     - name: Download File To Workspace
       uses: carlosperate/download-file-action@v1.0.3
@@ -27,7 +35,7 @@ jobs:
         chmod 777 repo-transporter
         ./repo-transporter
         ls -al
-        
+    
     - name: push
       uses: github-actions-x/commit@v2.6
       with:
@@ -36,44 +44,28 @@ jobs:
         commit-message: 'Automatically pushed by GitHub Actions'
         rebase: 'true' # pull abd rebase before commit
         force-add: 'true'
+        name: Purple-CSGO
+        email: 438518244@qq.com
     
     - name: dir
       run: |
         ls -al
         
-    # 等待10s 以防先发布再push
-    - name: Sleep for 10 seconds
+    # 等待15s 以防先发布再push
+    - name: Sleep for 15 seconds
       uses: jakejarvis/wait-action@master
       with:
-        time: '10s'
+        time: '15s'
+    
+    # 运行工具
+    - name: Github Release create, update, and upload assets
+      uses: meeDamian/github-release@v2.0.3
+      env:
+        TAG: 'v${{ env.LATEST_HLAE_TAG }}'
+      with:
+        token:  ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ env.TAG }}
+        name: ${{ env.TAG }}
+        body: This release is automatically made by GitHub Actions
 
-  release:
-    needs: transport
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      # 获取原仓库的版本
-      - name: Get Latest HLAE Tag
-      # ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-        uses: actions-hub/watch-tag@master
-        with:
-          provider: github
-          repository: advancedfx/advancedfx
-          env_name: LATEST_HLAE_TAG
-      
-      - name: dir
-        run: |
-          ls -al
-      
-      # Release 发布
-      - name: Create a Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: 'v${{ env.LATEST_HLAE_TAG }}'
-        with:
-          tag_name: ${{ env.TAG }}
-          release_name: ${{ env.TAG }}
-          body: This release is automatically made by GitHub Actions
-          draft: false
-          prerelease: false
+
